@@ -26,14 +26,14 @@ const ICONS: { id: AppId; label: string; icon: typeof Mail; desktop?: boolean }[
   { id: 'search', label: 'Search', icon: Search, desktop: true },
   { id: 'board', label: 'Case Board', icon: ClipboardList, desktop: true },
   { id: 'notebook', label: 'Notebook', icon: BookOpen, desktop: true },
-  { id: 'resolve', label: 'Submit Case', icon: Send, desktop: true },
+  { id: 'resolve', label: 'Submit Case', icon: Send, desktop: false },
 ];
 
 export function DesktopIcons() {
   const { openApp } = useCase();
 
   return (
-    <div className="absolute left-4 top-4 flex max-h-[calc(100%-64px)] flex-col flex-wrap gap-3">
+    <div className="absolute left-3 top-3 grid grid-cols-2 gap-x-1 gap-y-2">
       {ICONS.filter((i) => i.desktop).map((item) => {
         const Icon = item.icon;
         return (
@@ -41,10 +41,11 @@ export function DesktopIcons() {
             key={item.id}
             type="button"
             onDoubleClick={() => openApp(item.id)}
+            onClick={() => openApp(item.id)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') openApp(item.id);
             }}
-            className="group flex w-[76px] flex-col items-center gap-1.5 rounded-lg p-2 text-center text-white/90 transition hover:bg-white/10 focus:bg-white/15 focus:outline-none"
+            className="group flex w-[72px] flex-col items-center gap-1.5 rounded-lg p-2 text-center text-white/90 transition hover:bg-white/10 focus:bg-white/15 focus:outline-none"
             title={`Open ${item.label}`}
           >
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/12 shadow-lg backdrop-blur-sm ring-1 ring-white/20 transition group-hover:bg-white/20">
