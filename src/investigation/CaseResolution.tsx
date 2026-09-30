@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { useCase } from '@/investigation/CaseProvider';
 import clsx from 'clsx';
 
@@ -10,6 +11,7 @@ export function CaseResolution() {
     submitInvestigation,
     openApp,
   } = useCase();
+  const resultRef = useRef<HTMLDivElement>(null);
 
   const pinnedEvidence = investigation.pinnedEvidence
     .map((p) => caseData.evidence.find((e) => e.id === p.evidenceId))
@@ -27,6 +29,12 @@ export function CaseResolution() {
     investigation.resolutionAnswers['q-why'];
 
   const result = investigation.submissionResult;
+
+  useEffect(() => {
+    if (result && resultRef.current) {
+      resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [result]);
 
   return (
     <div className="flex h-full flex-col bg-white">
@@ -71,9 +79,9 @@ export function CaseResolution() {
             Which evidence supports your conclusion?
           </h3>
           <p className="mb-2 text-xs text-slate-400">
-            {pinnedEvidence.length > 0
-              ? 'Select from your pinned evidence.'
-              : 'Pin evidence on the board for clearer citation — showing discovered items for now.'}
+            Optional but recommended — cite the clues that convinced you.
+            {pinnedEvidence.length === 0 &&
+              ' Pin items on the board for a cleaner list; showing discovered items for now.'}
           </p>
           {selectable.length === 0 ? (
             <p className="rounded-lg bg-slate-50 p-3 text-sm text-slate-400">
@@ -116,15 +124,45 @@ export function CaseResolution() {
 
         {result && (
           <div
+            ref={resultRef}
             className={clsx(
-              'rounded-xl border p-4',
+              'rounded-xl border p-4 shadow-sm',
               result.feedbackTier === 'correct' && 'border-emerald-300 bg-emerald-50',
               result.feedbackTier === 'mostly_supported' && 'border-sky-300 bg-sky-50',
               result.feedbackTier === 'partially_supported' && 'border-amber-300 bg-amber-50',
               result.feedbackTier === 'unsupported' && 'border-red-300 bg-red-50',
             )}
           >
-            <h3 className="text-base font-bold text-slate-800">{result.message}</h3>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              Assessment
+            </p>
+            <h3 className="mt-1 text-lg font-bold text-slate-800">{result.message}</h3>
+            <div className="mt-3 flex flex-wrap gap-2 text-[11px] font-semibold">
+              <span
+                className={clsx(
+                  'rounded-full px-2 py-0.5',
+                  result.whatCorrect ? 'bg-emerald-200 text-emerald-900' : 'bg-red-200 text-red-900',
+                )}
+              >
+                What: {result.whatCorrect ? 'supported' : 'not supported'}
+              </span>
+              <span
+                className={clsx(
+                  'rounded-full px-2 py-0.5',
+                  result.whenCorrect ? 'bg-emerald-200 text-emerald-900' : 'bg-red-200 text-red-900',
+                )}
+              >
+                When: {result.whenCorrect ? 'supported' : 'not supported'}
+              </span>
+              <span
+                className={clsx(
+                  'rounded-full px-2 py-0.5',
+                  result.whyCorrect ? 'bg-emerald-200 text-emerald-900' : 'bg-red-200 text-red-900',
+                )}
+              >
+                Why: {result.whyCorrect ? 'supported' : 'not supported'}
+              </span>
+            </div>
             <ul className="mt-3 space-y-1.5 text-sm text-slate-700">
               {result.details.map((d) => (
                 <li key={d} className="flex gap-2">
@@ -134,8 +172,7 @@ export function CaseResolution() {
               ))}
             </ul>
             <p className="mt-3 text-xs text-slate-500">
-              The full case file remains sealed for replay. Keep investigating, adjust your answers,
-              and submit again.
+              The sealed case file stays closed so you can keep investigating and resubmit.
             </p>
           </div>
         )}
