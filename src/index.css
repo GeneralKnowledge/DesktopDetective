@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+:root {
+  --trace-bg: #1a2332;
+  --trace-surface: #243044;
+  --trace-surface-2: #2c3a52;
+  --trace-border: #3d4f6a;
+  --trace-text: #e8eef7;
+  --trace-muted: #8b9bb4;
+  --trace-accent: #3d8bfd;
+  --trace-accent-dim: #2563b8;
+  --trace-danger: #e35d6a;
+  --trace-success: #3ecf8e;
+  --trace-warning: #e6b84d;
+  --trace-window: #f4f6f9;
+  --trace-window-text: #1a2332;
+  --font-ui: "DM Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--font-ui);
+  background: var(--trace-bg);
+  color: var(--trace-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #c5cedb;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes boot-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease both;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.45s ease both;
+}
+
+.animate-boot-pulse {
+  animation: boot-pulse 1.6s ease-in-out infinite;
+}
